@@ -1,0 +1,259 @@
+q1
+
+Sure, here is a Java program that implements the described game:
+
+java
+import java.util.Random;
+import java.util.Scanner;
+
+public class GuessTheNumberGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        int minRange = 1;
+        int maxRange = 100;
+        int maxAttempts = 10;
+        int score = 0;
+        String playAgain = "y";
+
+        while (playAgain.equalsIgnoreCase("y")) {
+            int numberToGuess = random.nextInt(maxRange - minRange + 1) + minRange;
+            int attempts = 0;
+            boolean hasGuessedCorrectly = false;
+
+            System.out.println("\nI have generated a number between " + minRange + " and " + maxRange + ". You have " + maxAttempts + " attempts to guess it!");
+
+            while (attempts < maxAttempts) {
+                System.out.print("Enter your guess: ");
+                int guess = scanner.nextInt();
+                attempts++;
+
+                if (guess < numberToGuess) {
+                    System.out.println("Too low!");
+                } else if (guess > numberToGuess) {
+                    System.out.println("Too high!");
+                } else {
+                    System.out.println("Congratulations! You guessed the correct number in " + attempts + " attempts.");
+                    score += (maxAttempts - attempts + 1);  // Higher score for fewer attempts
+                    hasGuessedCorrectly = true;
+                    break;
+                }
+            }
+
+            if (!hasGuessedCorrectly) {
+                System.out.println("Sorry, you've used all your attempts. The correct number was " + numberToGuess + ".");
+            }
+
+            System.out.print("Do you want to play again? (y/n): ");
+            playAgain = scanner.next();
+        }
+
+        System.out.println("\nYour final score is " + score + ". Thanks for playing!");
+        scanner.close();
+    }
+}
+
+
+### How it works:
+1. *Generate a random number:* The program generates a random number between 1 and 100.
+2. *Prompt the user:* The user is prompted to enter their guess.
+3. *Compare and give feedback:* The program compares the user's guess with the generated number and provides feedback on whether the guess is too high, too low, or correct.
+4. *Repeat until correct or attempts exhausted:* Steps 2 and 3 are repeated until the user guesses the correct number or runs out of attempts.
+5. *Limit attempts:* The number of attempts is limited to 10.
+6. *Option for multiple rounds:* After each round, the user can choose to play again.
+7. *Display score:* The score is calculated based on the number of attempts taken and displayed at the end.
+
+
+
+
+
+Q2Sure, here is a Java program that takes marks obtained in each subject, calculates the total marks, average percentage, assigns grades, and displays the results:
+
+java
+import java.util.Scanner;
+
+public class StudentGradeCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Take the number of subjects
+        System.out.print("Enter the number of subjects: ");
+        int numberOfSubjects = scanner.nextInt();
+
+        int[] marks = new int[numberOfSubjects];
+        int totalMarks = 0;
+
+        // Take marks for each subject
+        for (int i = 0; i < numberOfSubjects; i++) {
+            System.out.print("Enter marks for subject " + (i + 1) + " (out of 100): ");
+            marks[i] = scanner.nextInt();
+            totalMarks += marks[i];
+        }
+
+        // Calculate average percentage
+        double averagePercentage = (double) totalMarks / numberOfSubjects;
+
+        // Determine the grade
+        String grade;
+        if (averagePercentage >= 90) {
+            grade = "A";
+        } else if (averagePercentage >= 80) {
+            grade = "B";
+        } else if (averagePercentage >= 70) {
+            grade = "C";
+        } else if (averagePercentage >= 60) {
+            grade = "D";
+        } else {
+            grade = "F";
+        }
+
+        // Display the results
+        System.out.println("\nTotal Marks: " + totalMarks);
+        System.out.println("Average Percentage: " + averagePercentage + "%");
+        System.out.println("Grade: " + grade);
+        
+        scanner.close();
+    }
+}
+
+
+### How it works:
+1. *Input Marks:* The program prompts the user to enter the number of subjects and then takes the marks obtained in each subject.
+2. *Calculate Total Marks:* The program sums up the marks obtained in all subjects.
+3. *Calculate Average Percentage:* The program calculates the average percentage by dividing the total marks by the total number of subjects.
+4. *Grade Calculation:* The program assigns grades based on the average percentage using predefined thresholds.
+5. *Display Results:* The program displays the total marks, average percentage, and the corresponding grade to the user.
+
+
+
+
+Q3Here is an implementation of an ATM machine and a bank account in Java, incorporating all the specified requirements:
+
+### BankAccount.java
+```java
+public class BankAccount {
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        } else {
+            System.out.println("Deposit amount must be positive.");
+        }
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            return true;
+        } else if (amount > balance) {
+            System.out.println("Insufficient balance.");
+            return false;
+        } else {
+            System.out.println("Withdrawal amount must be positive.");
+            return false;
+        }
+    }
+}
+```
+
+### ATM.java
+```java
+import java.util.Scanner;
+
+public class ATM {
+    private BankAccount account;
+
+    public ATM(BankAccount account) {
+        this.account = account;
+    }
+
+    public void displayMenu() {
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
+        while (choice != 4) {
+            System.out.println("\nATM Menu:");
+            System.out.println("1. Check Balance");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    checkBalance();
+                    break;
+                case 2:
+                    System.out.print("Enter deposit amount: ");
+                    double depositAmount = scanner.nextDouble();
+                    deposit(depositAmount);
+                    break;
+                case 3:
+                    System.out.print("Enter withdrawal amount: ");
+                    double withdrawalAmount = scanner.nextDouble();
+                    withdraw(withdrawalAmount);
+                    break;
+                case 4:
+                    System.out.println("Thank you for using the ATM. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+        scanner.close();
+    }
+
+    public void checkBalance() {
+        System.out.println("Current balance: $" + account.getBalance());
+    }
+
+    public void deposit(double amount) {
+        account.deposit(amount);
+        System.out.println("Deposited $" + amount);
+        checkBalance();
+    }
+
+    public void withdraw(double amount) {
+        if (account.withdraw(amount)) {
+            System.out.println("Withdrew $" + amount);
+        }
+        checkBalance();
+    }
+
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount(1000); // Initial balance of $1000
+        ATM atm = new ATM(account);
+        atm.displayMenu();
+    }
+}
+```
+
+### How it works:
+1. **BankAccount class:**
+   - Stores the account balance.
+   - Methods:
+     - `deposit(double amount)`: Adds the specified amount to the balance if it's positive.
+     - `withdraw(double amount)`: Subtracts the specified amount from the balance if there are sufficient funds and the amount is positive. Returns a boolean indicating success.
+     - `getBalance()`: Returns the current balance.
+
+2. **ATM class:**
+   - Represents the ATM machine.
+   - Contains a `BankAccount` instance to modify and access the account balance.
+   - Methods:
+     - `displayMenu()`: Displays the ATM menu and handles user input.
+     - `checkBalance()`: Prints the current balance.
+     - `deposit(double amount)`: Deposits the specified amount into the account and prints the new balance.
+     - `withdraw(double amount)`: Withdraws the specified amount from the account if possible and prints the new balance.
+
+3. **Main Method:**
+   - Creates a `BankAccount` instance with an initial balance of $1000.
+   - Creates an `ATM` instance with the bank account and displays the menu for user interaction.
